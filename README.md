@@ -40,5 +40,10 @@ yum install -y ipa-client
 ```shell
 ipa-server-install
 ```
+&ensp;&ensp;После завершения настройки и внесения соответствующих изменений в файл /etc/hosts хостовой машины, появится возможность доступа к серверу LDAP через веб-интерфейс:<br/>
+![изображение](https://github.com/user-attachments/assets/ef0c4864-cfd1-48dd-af57-39bc28ca11de)
+
+
+
 
 
