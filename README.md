@@ -28,4 +28,13 @@ nano /etc/hosts
 127.0.1.1 ipa.otus.lan ipa
 192.168.56.10 ipa.otus.lan ipa
 ```
+4. Установка на сервер пакета ipa-server:
+```shell
+yum install -y ipa-server
+```
+5. Установка на клиентские хосты пакета ipa-client:
+```shell
+yum install -y ipa-client
+```
+
 
