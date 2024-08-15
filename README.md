@@ -36,5 +36,9 @@ yum install -y ipa-server
 ```shell
 yum install -y ipa-client
 ```
+6. Для настройки сервера LDAP необходимо запустить соответствующий скрипт ipa-server-install. Во время его работы в интерактивном режиме необходимо указать имя сервера, имя домена и пароль администратора LDAP сервера:
+```shell
+ipa-server-install
+```
 
 
