@@ -68,7 +68,7 @@ firewall-cmd --permanent --add-service=kerberos
 firewall-cmd --permanent --add-service=kpasswd
 firewall-cmd --permanent --add-service=dns
 ```
-
+&ensp;&ensp;Для автоматического конфигурирования инфраструктуры с помощью Ansible, подготовлен плейбук playbook.yml.
 
 
 
