@@ -43,7 +43,10 @@ ipa-server-install
 &ensp;&ensp;После завершения настройки и внесения соответствующих изменений в файл /etc/hosts хостовой машины, появится возможность доступа к серверу LDAP через веб-интерфейс:<br/>
 ![изображение](https://github.com/user-attachments/assets/ef0c4864-cfd1-48dd-af57-39bc28ca11de)
 
-
-
+7. Добавление клиентских хостов в IPA-server производится с помощью скрипта ipa-client-install, который необходимо запустить на каждом из них:
+```shell
+ipa-client-install --mkhomedir --domain=OTUS.LAN --server=ipa.otus.lan --no-ntp -p admin -w admin1234
+```
+8. Проверка наличия клиентских хостов на IPA сервере:<br/>
 
 
