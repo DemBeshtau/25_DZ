@@ -48,5 +48,7 @@ ipa-server-install
 ipa-client-install --mkhomedir --domain=OTUS.LAN --server=ipa.otus.lan --no-ntp -p admin -w admin1234
 ```
 8. Проверка наличия клиентских хостов на IPA сервере:<br/>
+![изображение](https://github.com/user-attachments/assets/31f85763-f9cb-4014-b835-84040dd38444)
+
 
 
