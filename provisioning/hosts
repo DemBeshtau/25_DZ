@@ -1,0 +1,7 @@
+[server]
+ipa-server ansible_host=192.168.56.10 ansible_user=vagrant ansible_password=vagrant
+
+[clients]
+client1 ansible_host=192.168.56.11 ansible_user=vagrant ansible_password=vagrant
+client2 ansible_host=192.168.56.12 ansible_user=vagrant ansible_password=vagrant
+

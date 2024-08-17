@@ -1,0 +1,112 @@
+---
+- name: Base setup
+  hosts: all
+  become: true
+  tasks:
+
+  - name: Installing necessary soft on CentOS
+    yum:
+      name:
+        - nano
+      state: present
+      update_cache: yes
+
+  - name: Disabling SELinux
+    selinux:
+      state: disabled
+
+  - name: Disabling SELinux now
+    shell: setenforce 0
+    ignore_errors: true
+
+  - name: Setting timezone
+    timezone:
+      name: "Europe/Moscow"
+
+  - name: Adding data in /etc/hosts
+    template:
+      src: hosts.j2
+      dest: /etc/hosts
+      owner: root
+      group: root
+      mode: 0644      
+
+  - name: Enableing -firewald- service
+    systemd:
+      name: firewalld
+      state: started
+      enabled: true
+        
+  - name: Configuring firewall
+    firewalld:
+      service: "{{ item }}"
+      permanent: true
+      state: enabled
+      immediate: true
+    with_items:
+      - ntp
+      - http
+      - https
+      - ldap
+      - ldaps
+      - kerberos
+      - kpasswd
+      - dns
+
+- name: Configuring IPA server
+  hosts: ipa-server
+  become: true
+  vars_files:
+    - defaults/main.yml
+  tasks:
+
+  - name: Installing FreeIPA server
+    yum:
+      name: ipa-server
+      state: present
+  
+  - name: Generating keypairs
+    openssh_keypair:
+      path: /home/vagrant/.ssh/id_rsa
+      owner: vagrant
+      group: vagrant
+    
+  - name: Receiving public key
+    shell: cat /home/vagrant/.ssh/id_rsa.pub
+    register: public_key
+    changed_when: false
+
+  - name: Configuring server
+    shell: echo -e "no\n{{ ipa_server }}\n{{ domain }}\n{{ realm }}\n{{ admin_pass }}\n{{ admin_pass }}\n{{ admin_pass }}\n{{ admin_pass }}\n{{ netbios }}\nno\nyes" | ipa-server-install
+    args:
+      creates: /etc/ipa/default.conf
+
+  - name: Adding user
+    ipa_user:
+      ipa_host: "{{ ipa_server }}"
+      ipa_user: "{{ admin_acc }}"
+      ipa_pass: "{{ admin_pass }}"
+      name: "{{ user_acc }}"
+      givenname: "{{ first }}"
+      sn: "{{ last }}"
+      loginshell: /bin/bash
+      sshpubkey:
+        - "{{ public_key.stdout }}"    
+
+- name: Configuring clients hosts
+  hosts: client1, client2
+  become: true
+  vars_files:
+    - defaults/main.yml
+  tasks:
+
+    - name: Installing FreeIPA client
+      yum:
+        name: ipa-client
+        state: present
+    
+    - name: Adding clients to IPA server
+      shell: echo -e "yes\nyes" | ipa-client-install --mkhomedir --domain={{ realm }} --server={{ ipa_server }} --no-ntp -p {{ admin_acc }} -w {{ admin_pass }} 
+      args:
+        creates: /etc/ipa/default.conf 
+...
